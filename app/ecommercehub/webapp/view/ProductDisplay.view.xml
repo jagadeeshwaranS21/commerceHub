@@ -1,0 +1,99 @@
+<mvc:View
+    controllerName="ecommercehub.controller.ProductDisplay"
+    displayBlock="true"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:tnt="sap.tnt"
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m"
+>
+    <Page showHeader="false">
+        <mvc:XMLView viewName="ecommercehub.view.Header" />
+        <IconTabBar
+            items="{variants>/}"
+            expandable="true"
+        >
+            <items>
+                <IconTabFilter
+                    text="{variants>sku}"
+                    key="{variants>ID}"
+                >
+                    <HBox
+                        width="100%"
+                        alignItems="Start"
+                        class="sapUiMediumMargin"
+                    >
+                        <Image
+                            src="{variants>imageUrl}"
+                            width="50rem"
+                            height="30rem"
+                            densityAware="false"
+                            class="sapUiSmallMarginEnd"
+                        >
+                            <detailBox>
+                                <LightBox>
+                                    <LightBoxItem
+                                        imageSrc="{variants>imageUrl}"
+                                        alt="{variants>name}"
+                                        title="{variants>name}"
+                                        subtitle="{variants>description}"
+                                    />
+                                </LightBox>
+                            </detailBox>
+                        </Image>
+
+                        <VBox
+                            width="40%"
+                            class="sapUiLargeMarginTop"
+                        >
+                            <Title
+                                text="{variants>name}"
+                                wrapping="true"
+                                class="sapUiSmallMarginBottom"
+                                titleStyle="H1"
+                            />
+
+                            <Text
+                                text="{variants>description}"
+                                wrapping="true"
+                                class="sapUiSmallMarginBottom"
+                            />
+
+                            <ObjectNumber
+                                number="{variants>price}"
+                                unit="{variants>currency}"
+                                emphasized="true"
+                                class="sapUiSmallMarginBottom"
+                                state="Success"
+                            />
+                            <RatingIndicator
+                                maxValue="5"
+                                class="sapUiSmallMarginBottom"
+                                value="{variants>averageRating}"
+                                iconSize="32px"
+                                editable="false"
+                            />
+                            <Button
+                                icon="sap-icon://cart"
+                                text="Add To Cart"
+                                type="Emphasized"
+                                class="sapUiSmallMarginBottom"
+                                width="12rem"
+                            />
+                            <Button
+                                icon="sap-icon://target-group"
+                                text="Buy Now"
+                                type="Critical"
+                                class="sapUiSmallMarginBottom"
+                                width="12rem"
+                            />
+                        </VBox>
+                    </HBox>
+                </IconTabFilter>
+            </items>
+        </IconTabBar>
+        <FeedInput
+            icon="test-resources/sap/m/images/dronning_victoria.jpg"
+            class="sapUiSmallMarginTopBottom"
+        />
+    </Page>
+</mvc:View>

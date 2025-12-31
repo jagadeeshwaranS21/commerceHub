@@ -1,0 +1,88 @@
+<mvc:View
+    controllerName="ecommercehub.controller.Header"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:tnt="sap.tnt"
+    xmlns="sap.m"
+>
+            <ScrollContainer
+                vertical="true"
+                height="100%"
+            >
+                <tnt:ToolHeader
+                    id="shellLikeToolHeader"
+                >
+                <Button  visible="{ui>/showBack}" press="onNavBack" type="Back"/>
+                    <Image
+                        src="https://static.vecteezy.com/system/resources/previews/011/107/377/original/ecommerce-3d-icon-illustration-png.png"
+                        decorative="false"
+                        width="60px"
+                        height="30px"
+                        press="backToHome"
+                    >
+                        <layoutData>
+                            <OverflowToolbarLayoutData
+                                priority="NeverOverflow"
+                            />
+                        </layoutData>
+                    </Image>
+                    <Title
+                        text="E-Commerce Hub"
+                        wrapping="false"
+                        id="HeaderTitle"
+                        class="sapMTitle"
+                    >
+                        <layoutData>
+                            <OverflowToolbarLayoutData priority="Disappear" />
+                        </layoutData>
+                    </Title>
+                    <Text
+                        text="Modern E-Commerce Platform"
+                        wrapping="false"
+                        id="secondTitle"
+                        class="appHeaderSubTitle"
+                    >
+                        <layoutData>
+                            <OverflowToolbarLayoutData priority="Disappear" />
+                        </layoutData>
+                    </Text>
+                    <ToolbarSpacer />
+                    <SearchField
+                        width="25rem"
+                        id="searchField"
+                        placeholder="Search for products, brands and more"
+                        search="onSearch" >
+                        <layoutData>
+                            <OverflowToolbarLayoutData
+                                priority="Low"
+                                group="1"
+                            />
+                        </layoutData>
+                    </SearchField>
+                    <Button
+                        visible="false"
+                        icon="sap-icon://search"
+                        type="Transparent"
+                        id="searchButton"
+                        tooltip="Search"
+                    />
+                    <Button
+                        visible="true"
+                        icon="sap-icon://cart"
+                        width="2rem"
+                        iconFirst="false"
+                        press="toCart"
+                    />
+                    <tnt:ToolHeaderUtilitySeparator />
+                    <Avatar
+                        src="{CurrentUser>/avatar}"
+                        displaySize="XS"
+                        tooltip="Profile"
+                        press="goToUserPage">
+                        <layoutData>
+                            <OverflowToolbarLayoutData priority="NeverOverflow"/>
+                        </layoutData>
+                    </Avatar>
+                </tnt:ToolHeader>
+            </ScrollContainer>
+            
+</mvc:View>

@@ -1,0 +1,28 @@
+using {commerce.db as db} from '../db/schema';
+
+service CommerceService {
+    @cds.redirection.target
+    entity Products         as projection on db.Product;
+
+    entity PromotedProducts as
+        projection on db.Product {
+            *
+        }
+        where
+            isPromoted = true;
+
+    entity Categories       as projection on db.Category;
+    entity ProductVariants  as projection on db.ProductVariant;
+    entity Stocks           as projection on db.Stock;
+    entity Warehouses       as projection on db.Warehouse;
+    entity Carts            as projection on db.Cart;
+    entity CartItems        as projection on db.CartItem;
+    entity ProductCategory  as projection on db.ProductCategory;
+    entity Users            as projection on db.Users;
+    entity OfferBanner      as projection on db.OfferBanner;
+
+    function findCurrentUser(code: String) returns String;
+    function findCurrentUserCart(code:String) returns String;
+    action   addToCart(productCode: String, quantity: Integer,userCode:String);
+
+}

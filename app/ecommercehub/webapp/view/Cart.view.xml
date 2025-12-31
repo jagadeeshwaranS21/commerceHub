@@ -1,0 +1,86 @@
+<mvc:View
+    xmlns:table="sap.fe.macros.table"
+    controllerName="ecommercehub.controller.Cart"
+    displayBlock="true"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:p="sap.m.plugins"
+>
+    <Page
+        enableScrolling="true"
+        showHeader="false"
+    >
+        <mvc:XMLView viewName="ecommercehub.view.Header" />
+        <Table
+            id="cartItemTable"
+            items="{cartItem>/}"
+        >
+            <headerToolbar>
+                <OverflowToolbar>
+                    <content>
+                        <Title
+                            text="{cart>/cartCode}"
+                            level="H1"
+                        />
+                        <ToolbarSpacer />
+                    </content>
+                </OverflowToolbar>
+            </headerToolbar>
+            <columns>
+                <Column width="12em">
+                    <Text text="Image" />
+                </Column>
+                <Column width="12em">
+                    <Text text="Name" />
+                </Column>
+                <Column
+                    minScreenWidth="Tablet"
+                    demandPopin="true"
+                >
+                    <Text text="Description" />
+                </Column>
+                <Column
+                    minScreenWidth="Desktop"
+                    demandPopin="true"
+                    hAlign="End"
+                >
+                    <Text text="UnitPrice" />
+                </Column>
+                <Column
+                    minScreenWidth="Desktop"
+                    demandPopin="true"
+                    hAlign="Center"
+                >
+                    <Text text="Quantity" />
+                </Column>
+                <Column hAlign="Left">
+                    <Text text="Price" />
+                </Column>
+            </columns>
+            <items>
+                <ColumnListItem vAlign="Middle">
+                    <Image
+                        width="5rem"
+                        height="5rem"
+                        src="{cartItem>product/imageUrl}"
+                    />
+                    <Text text="{cartItem>product/name}" />
+                    <Text text="{cartItem>product/description}" />
+                    <Text text="{cartItem>unitPrice}" />
+                    <StepInput
+                        value="{cartItem>quantity}"
+                        min="1"
+                        max="100"
+                        width="5rem"
+                        step="1"
+                        enabled="true"
+                        editable="true"
+                        validationMode="LiveChange"
+                    />
+                    <Text text="{cartItem>totalPrice}" />
+                </ColumnListItem>
+            </items>
+        </Table>
+    </Page>
+</mvc:View>
