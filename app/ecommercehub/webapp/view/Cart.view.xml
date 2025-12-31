@@ -78,7 +78,13 @@
                         editable="true"
                         validationMode="LiveChange"
                     />
-                    <Text text="{cartItem>totalPrice}" />
+                    <ObjectNumber
+                        number="{
+							parts:[{path:'cartItem>totalPrice'}],
+							type: 'sap.ui.model.type.Currency'
+						}"
+                        unit="{cartItem>currency}"
+                    />
                 </ColumnListItem>
             </items>
         </Table>
