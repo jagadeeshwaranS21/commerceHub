@@ -1,0 +1,16 @@
+<mvc:View xmlns:form="sap.ui.layout.form"
+    controllerName="commerce.app.commerce.controller.Commerce"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+>
+    <Page
+        id="page"
+        title="{i18n>title}"
+    >
+        <Input valueLiveUpdate="true"  value="{UserModel>/name}"></Input>
+        <Input valueLiveUpdate="true" value="{UserModel>/age}"  ></Input>
+
+        <Button text="changeData" press="changeData"/>
+
+    </Page>
+</mvc:View>

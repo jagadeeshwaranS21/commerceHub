@@ -1,7 +1,7 @@
 {
   "_version": "1.76.0",
   "sap.app": {
-    "id": "ecommercehub",
+    "id": "commerce.app.commerce",
     "type": "application",
     "i18n": "i18n/i18n.properties",
     "applicationVersion": {
@@ -13,7 +13,7 @@
     "sourceTemplate": {
       "id": "@sap/generator-fiori:basic",
       "version": "1.20.0",
-      "toolsId": "194f2188-84cf-4f1e-963f-6ba9d0cd269e"
+      "toolsId": "b94572e4-e64b-4e14-8587-f39c842ad97c"
     },
     "dataSources": {
       "mainService": {
@@ -27,11 +27,11 @@
     },
     "crossNavigation": {
       "inbounds": {
-        "commerce-commerce": {
-          "semanticObject": "commerce",
-          "action": "commerce",
-          "title": "{{commerce-commerce.flpTitle}}",
-          "subTitle": "{{commerce-commerce.flpSubtitle}}",
+        "display-display": {
+          "semanticObject": "display",
+          "action": "display",
+          "title": "{{display-display.flpTitle}}",
+          "subTitle": "{{display-display.flpSubtitle}}",
           "signature": {
             "parameters": {},
             "additionalParameters": "allowed"
@@ -73,7 +73,7 @@
       "i18n": {
         "type": "sap.ui.model.resource.ResourceModel",
         "settings": {
-          "bundleName": "ecommercehub.i18n.i18n"
+          "bundleName": "commerce.app.commerce.i18n.i18n"
         }
       },
       "": {
@@ -101,69 +101,28 @@
         "transition": "slide",
         "type": "View",
         "viewType": "XML",
-        "path": "ecommercehub.view",
+        "path": "commerce.app.commerce.view",
         "async": true,
-        "viewPath": "ecommercehub.view"
+        "viewPath": "commerce.app.commerce.view"
       },
       "routes": [
         {
-          "name": "RouteECommerceHub",
+          "name": "RouteCommerce",
           "pattern": ":?query:",
           "target": [
-            "TargetECommerceHub"
+            "TargetCommerce"
           ]
-        },
-        {
-          "name": "User",
-          "pattern": "User",
-          "target": "User"
-        },
-        {
-          "pattern": "Product/{productId}/{productType}",
-          "name": "ProductDisplay",
-          "target": "ProductDisplay"
-        },
-        {
-          "pattern": "ProductListing/{query}",
-          "name": "ProductListing",
-          "target": "ProductListing"
-        },
-        {
-          "pattern": "Cart/{customerCode}",
-          "name": "Cart",
-          "target": "Cart"
-        },
-        {
-          "pattern": "Checkout/{cartId}",
-          "name": "Checkout",
-          "target": "Checkout"
         }
       ],
       "targets": {
-        "TargetECommerceHub": {
-          "id": "ECommerceHub",
-          "name": "ECommerceHub"
-        },
-        "User": {
-          "id": "User",
-          "name": "User"
-        },
-        "ProductDisplay": {
-          "name": "ProductDisplay"
-        },
-        "ProductListing": {
-          "name": "ProductListing"
-        },
-        "Cart": {
-          "name": "Cart"
-        },
-        "Checkout": {
-          "name": "Checkout"
+        "TargetCommerce": {
+          "id": "Commerce",
+          "name": "Commerce"
         }
       }
     },
     "rootView": {
-      "viewName": "ecommercehub.view.App",
+      "viewName": "commerce.app.commerce.view.App",
       "type": "XML",
       "id": "App",
       "async": true

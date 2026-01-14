@@ -11,12 +11,27 @@ sap.ui.define([
     return Controller.extend("ecommercehub.controller.Header", {
         customerCode: 'CUST-1001',
         onInit() {
+            this.getView().setModel(
+                new sap.ui.model.json.JSONModel([]),
+                "suggestions"
+            );
             const oModel = this.getOwnerComponent().getModel();
-            const oContextBinding = oModel.bindContext(`/findCurrentUser(code='${this.customerCode}')`);
-            oContextBinding.requestObject()
-                .then((oUser) => {
+            const oListBinding = oModel.bindList("/Users", null, null, null, {
+                $filter: `customerCode eq '${this.customerCode}'`
+            });
+
+            oListBinding.requestContexts()
+                .then((aContexts) => {
+                    if (!aContexts.length) {
+                        console.log("No user found");
+                        return;
+                    }
+
+                    const oUser = aContexts[0].getObject();
+
                     const oUserModel = new JSONModel(oUser);
-                    this.getView().setModel(oUserModel, "CurrentUser");
+                    this.getOwnerComponent().setModel(oUserModel, "CurrentUser");
+
                     console.log("User:", oUser);
                 })
                 .catch((oError) => {
@@ -64,5 +79,7 @@ sap.ui.define([
                     customerCode: this.customerCode
                 });
         }
+
+
     });
 });

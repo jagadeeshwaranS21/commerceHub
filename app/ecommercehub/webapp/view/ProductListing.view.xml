@@ -12,16 +12,24 @@
         enableScrolling="true"
     >
         <mvc:XMLView viewName="ecommercehub.view.Header" />
-
+        <VBox
+            class="sapUiMediumMarginBegin sapUiSmallMarginTop sapUiSmallMarginBottom"
+        >
+            <Title text="Search Result" />
+            <Text text="{view>/searchQuery}" />
+        </VBox>
         <List
             id="productList"
-            items="{/Products}"
+            items="{/ProductVariants}"
             growing="true"
             growingScrollToLoad="true"
             noDataText="No products found"
         >
             <items>
-                <CustomListItem type="Active" press="selectProduct">
+                <CustomListItem
+                    type="Active"
+                    press="selectProduct"
+                >
                     <HBox
                         width="100%"
                         class="sapUiSmallMargin"
@@ -50,29 +58,30 @@
                                 editable="false"
                             />
                             <ObjectNumber
-                                number="{basePrice}"
+                                number="{price}"
                                 unit="{currency}"
                                 emphasized="true"
                                 state="Success"
                                 class="sapUiSmallMarginEnd"
                             />
                         </VBox>
-                        <Button
-                            icon="sap-icon://cart"
-                            text="Add To Cart"
-                            type="Emphasized"
-                            class="sapUiSmallMarginBottom"
-                            width="8rem"
-                        />
-                        <ToolbarSeparator />
-                        <Button
-                            icon="sap-icon://target-group"
-                            text="Buy Now"
-                            type="Critical"
-                            class="sapUiSmallMarginBottom sapUiMediumMarginEnd"
-                            width="8rem"
-                        />
-                        <ToolbarSpacer />
+                        <VBox>
+                            <Button
+                                icon="sap-icon://cart"
+                                text="Add To Cart"
+                                type="Emphasized"
+                                class="sapUiTinyMarginBottom"
+                                width="8rem"
+                                press="addToCart"
+                            />
+                            <Button
+                                icon="sap-icon://target-group"
+                                text="Buy Now"
+                                type="Critical"
+                                class="sapUiTinyMarginBottom sapUiMediumMarginEnd"
+                                width="8rem"
+                            />
+                        </VBox>
                     </HBox>
                 </CustomListItem>
             </items>

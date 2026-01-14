@@ -8,11 +8,8 @@ sap.ui.define([
 ], (Controller, MessageToast, Filter, FilterOperator, JSONModel, Fragment) => {
     "use strict";
 
-    return Controller.extend("ecommercehub.controller.User", {
+    return Controller.extend("ecommercehub.controller.Footer", {
         onInit() {
-            const oModel = this.getOwnerComponent().getModel('CurrentUser');
-        },backToHome : function () {
-			this.getOwnerComponent().getTargets().display("TargetECommerceHub");
-		}
+        }
     });
 });

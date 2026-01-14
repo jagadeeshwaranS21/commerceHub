@@ -13,7 +13,26 @@ sap.ui.define([
         onInit() {
             this.getBannerImages();
             this._startCarouselAutoSlide();
-        }, 
+            this.getOfferBanner();
+        },
+        getOfferBanner() {
+            const oModel = this.getOwnerComponent().getModel();
+
+            const oListBinding = oModel.bindList("/OfferBanner");
+
+            oListBinding.requestContexts().then((aContexts) => {
+                if (!aContexts.length) {
+                    return;
+                }
+
+                const oBanner = aContexts[0].getObject();
+                console.log(oBanner);
+                this.getView().setModel(
+                    new JSONModel(oBanner),
+                    "OfferBanner"
+                );
+            });
+        },
         _startCarouselAutoSlide: function () {
             const oCarousel = this.byId("offerCarousel");
 
@@ -25,7 +44,7 @@ sap.ui.define([
         },
         getBannerImages() {
             const oModel = this.getOwnerComponent().getModel();
-            const oListBinding = oModel.bindList("/OfferBanner");
+            const oListBinding = oModel.bindList("/CarouselBanner");
             oListBinding.requestContexts().then((aContexts) => {
                 const OfferBanner = aContexts.map(oContext => oContext.getObject());
                 console.log("OfferBanners:", OfferBanner);
@@ -41,10 +60,16 @@ sap.ui.define([
         },
         selectProduct(oEvent) {
             const oContext = oEvent.getSource().getBindingContext();
+            // oContext.setProperty('basePrice',0.00);
+            // oContext.delete();
+            console.log(oContext);
             const sProductId = oContext.getProperty("ID");
             this.getOwnerComponent().getRouter().navTo("ProductDisplay", {
-                productId: sProductId
+                productId: sProductId, productType: 'BaseProduct'
             });
+        }, searchProduct(oEvent) {
+            console.log(oEvent.getParameters());
+            console.log(oEvent.getSource());
         }
     });
 });

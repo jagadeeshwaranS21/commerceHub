@@ -8,23 +8,22 @@
 >
     <Page showHeader="false">
         <mvc:XMLView viewName="ecommercehub.view.Header" />
-        <IconTabBar
-            items="{variants>/}"
-            expandable="true"
-        >
+
+        <IconTabBar items="{variants>/}">
             <items>
                 <IconTabFilter
                     text="{variants>sku}"
                     key="{variants>ID}"
                 >
                     <HBox
+                        wrap="Wrap"
                         width="100%"
                         alignItems="Start"
-                        class="sapUiMediumMargin"
+                        class="sapUiTinyMargin"
                     >
                         <Image
                             src="{variants>imageUrl}"
-                            width="50rem"
+                            width="40rem"
                             height="30rem"
                             densityAware="false"
                             class="sapUiSmallMarginEnd"
@@ -57,13 +56,25 @@
                                 wrapping="true"
                                 class="sapUiSmallMarginBottom"
                             />
-
                             <ObjectNumber
                                 number="{variants>price}"
                                 unit="{variants>currency}"
                                 emphasized="true"
                                 class="sapUiSmallMarginBottom"
                                 state="Success"
+                            />
+
+                            <ObjectNumber
+                                number="{
+                                    path: 'variants>stocks',
+                                    formatter: '.formatter.totalStockQuantity'
+                                }"
+                                emphasized="true"
+                                class="sapUiSmallMarginBottom"
+                                state="{
+                                    path:'variants>stocks',
+                                    formatter:'.formatter.stockState'
+                                }"
                             />
                             <RatingIndicator
                                 maxValue="5"
@@ -72,12 +83,24 @@
                                 iconSize="32px"
                                 editable="false"
                             />
+                            <StepInput
+                                id="qtyInput"
+                                textAlign="Center"
+                                width="5rem"
+                                value="{quantity>/quantity}"
+                                min="1"
+                            />
                             <Button
                                 icon="sap-icon://cart"
                                 text="Add To Cart"
                                 type="Emphasized"
                                 class="sapUiSmallMarginBottom"
                                 width="12rem"
+                                press="addToCart"
+                                enabled="{
+                                    path: 'variants>stocks',
+                                    formatter: '.formatter.isAddToCartEnabled'
+                                }"
                             />
                             <Button
                                 icon="sap-icon://target-group"
@@ -88,12 +111,12 @@
                             />
                         </VBox>
                     </HBox>
+                    <FeedInput
+                        icon="{CurrentUser>/avatar}"
+                        class="sapUiSmallMarginBottom"
+                    />
                 </IconTabFilter>
             </items>
         </IconTabBar>
-        <FeedInput
-            icon="test-resources/sap/m/images/dronning_victoria.jpg"
-            class="sapUiSmallMarginTopBottom"
-        />
     </Page>
 </mvc:View>

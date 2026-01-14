@@ -14,7 +14,8 @@
   },
   "scripts": {
     "start": "cds-serve",
-    "watch-ecommercehub": "cds watch --open ecommercehub/index.html?sap-ui-xx-viewCache=false --livereload false"
+    "watch-ecommercehub": "cds watch --open ecommercehub/index.html?sap-ui-xx-viewCache=false --livereload false",
+    "watch-commerce": "cds watch --open commerce.app.commerce/index.html?sap-ui-xx-viewCache=false --livereload false"
   },
   "private": true,
   "cds": {

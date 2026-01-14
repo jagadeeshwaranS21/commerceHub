@@ -10,34 +10,59 @@ sap.ui.define([
 
     return Controller.extend("ecommercehub.controller.Cart", {
         onInit() {
+            this.userData = this.getOwnerComponent().getModel("CurrentUser").getData();
             const oRouter = this.getOwnerComponent().getRouter();
             oRouter.getRoute("Cart").attachPatternMatched(this._onRouteMatched, this);
         },
         _onRouteMatched(oEvent) {
+            const oModel = this.getOwnerComponent().getModel("CurrentUser");
+            const user = oModel.getData();
+            console.log("User Data:");
+            console.log(user);
             const customerCode = oEvent.getParameter("arguments").customerCode;
             console.log("Received customerCode:", customerCode);
-            this._loadCart(customerCode);
+            this._loadCart(user.ID);
         },
 
-        _loadCart(customerCode) {
+        _loadCart(userId) {
             const oModel = this.getOwnerComponent().getModel();
 
-            const oContextBinding = oModel.bindContext(
-                `/findCurrentUserCart?code=${customerCode}`
-            );
+            const oListBinding = oModel.bindList("/Carts", null, null, null, {
+                $filter: `user_ID eq ${userId} and status eq 'ACTIVE'`,
+                $expand: {
+                    items: {
+                        $expand: "variant"
+                    }
+                }
+            });
 
-            oContextBinding.requestObject()
-                .then((cart) => {
+            oListBinding.requestContexts()
+                .then((aContexts) => {
+                    if (!aContexts.length) {
+                        console.log("No active cart found");
+                        return;
+                    }
+
+                    const oCart = aContexts[0].getObject();
+
+                    const aCartItems = oCart.items;
+
                     this.getView().setModel(
-                        new sap.ui.model.json.JSONModel(cart.cartItem),
-                        "cartItem"
-                    );
-                    this.getView().setModel(
-                        new sap.ui.model.json.JSONModel(cart),
+                        new sap.ui.model.json.JSONModel(oCart),
                         "cart"
                     );
-                    console.log(cart);
-                });
+                    console.log("Cart:", oCart);
+                    console.log("Items:", aCartItems);
+                })
+                .catch(console.error);
+        }, onQuantityChange() {
+            const oModel = this.getView().getModel("cart");
+            console.log("Model type:", oModel.getMetadata().getName());
+        }, checkout() {
+            const oModel = this.getView().getModel("cart");
+            const cart = oModel.getData();
+            console.log(cart.ID);
+            this.getOwnerComponent().getRouter().navTo("Checkout",{cartId:cart.ID});
         }
     });
 });

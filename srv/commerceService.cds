@@ -19,10 +19,22 @@ service CommerceService {
     entity CartItems        as projection on db.CartItem;
     entity ProductCategory  as projection on db.ProductCategory;
     entity Users            as projection on db.Users;
-    entity OfferBanner      as projection on db.OfferBanner;
 
-    function findCurrentUser(code: String) returns String;
-    function findCurrentUserCart(code:String) returns String;
-    action   addToCart(productCode: String, quantity: Integer,userCode:String);
+    entity OfferBanner      as
+        projection on db.OfferBanner {
+            *
+        }
+        where
+            isCarousel = false;
+
+    entity CarouselBanner   as
+        projection on db.OfferBanner {
+            *
+        }
+        where
+            isCarousel = true;
+
+    action addToCart(productCode: String, quantity: Integer, userID: String);
+    action checkout(userID:String);
 
 }
