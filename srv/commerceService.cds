@@ -35,6 +35,15 @@ service CommerceService {
             isCarousel = true;
 
     action addToCart(productCode: String, quantity: Integer, userID: String);
-    action checkout(userID:String);
-    
+    action checkout(userID: String);
+    action findLocation(address: LocationRequest) returns array of String;
+}
+
+type LocationRequest {
+    street     : String;
+    city       : String;
+    state      : String;
+    country    : String;
+    postalcode : String;
+    amenity    : String;
 }

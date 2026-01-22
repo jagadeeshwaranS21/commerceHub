@@ -1,3 +1,6 @@
+import { executeHttpRequest } from '@sap-cloud-sdk/http-client';
+import { getDestination } from '@sap-cloud-sdk/connectivity';
+
 export default (srv) => {
 
     srv.on("addToCart", async (req) => {
@@ -84,5 +87,51 @@ export default (srv) => {
             return orderItem
         });
         await INSERT.into("OrderItem").entries(orderItem);
-    })
+    });
+
+    srv.on("findLocation", async (req) => {
+        const address = req.data.address;
+        if(!address || address=={}){
+            return {err: "Request data is empty",
+                requestData:address}
+        }
+        let destination;
+
+        try {
+            destination = await getDestination({
+                destinationName: 'nominatim'
+            });
+        } catch (err) {
+            console.error("Destination error", err);
+            return {
+                message: err.message,
+                err: "Failed to get destination"
+            };
+        }
+
+        try {
+            const response = await executeHttpRequest(destination, {
+                method: 'GET',
+                url: '/search',
+                params: {
+                    ...address,
+                    format: "jsonv2"
+                },
+                headers: {
+                    'User-Agent': 'CAP-App'
+                }
+            });
+
+            return response.data;
+
+        } catch (err) {
+            console.error("HTTP error", err);
+            return {
+                message: err.message,
+                err: "Failed to get response from Nominatim",
+                requestData:address
+            };
+        }
+    });
+
 }
