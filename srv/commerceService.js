@@ -175,6 +175,6 @@ export default (srv) => {
 
 
     srv.on("SayHello",async (req)=>{
-        return "HelloWorld"
+        return "HelloWorld";
     })
 }
