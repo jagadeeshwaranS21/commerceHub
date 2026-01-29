@@ -59,41 +59,43 @@ export default (srv) => {
             .where({ ID: cartId });
     })
 
-    srv.on("submitOrder", async (req) => {
-        const { userID } = req.data;
-        const cart = await SELECT.one.from("Cart").where({ user_ID: userID, status: 'ACTIVE' });
-        const cartItems = await SELECT.from("CartItem").where({ cart_ID: cart.ID });
-        console.log("Cart Items", cartItems);
-        console.log("Cart", cart);
-        const today = new Date().toISOString().slice(0, 10).replace(/-/g, "");
-        const rand = Math.floor(1000 + Math.random() * 9000);
-        const orderCode = `ORDER-${today}-${rand}`;
-        const newOrder = {
-            orderCode, subtotal: cart.subtotal, taxAmount: cart.taxAmount
-            , shippingFee: cart.shippingFee, grandTotal: cart.grandTotal
-            , user_ID: userID
-        };
-        console.log("New Order", newOrder);
-        await INSERT.into("Orders").entries(newOrder);
-        const order = await SELECT.one.from("Orders").where({ orderCode: orderCode });
-        console.log("Saved Order", order);
-        const orderItem = cartItems.map((item) => {
-            let orderItem = {
-                order_ID: order.ID,
-                variant_ID: item.variant_ID,
-                quantity: item.quantity,
-                unitPrice: item.unitPrice
-            }
-            return orderItem
-        });
-        await INSERT.into("OrderItem").entries(orderItem);
-    });
+    // srv.on("submitOrder", async (req) => {
+    //     const { userID } = req.data;
+    //     const cart = await SELECT.one.from("Cart").where({ user_ID: userID, status: 'ACTIVE' });
+    //     const cartItems = await SELECT.from("CartItem").where({ cart_ID: cart.ID });
+    //     console.log("Cart Items", cartItems);
+    //     console.log("Cart", cart);
+    //     const today = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+    //     const rand = Math.floor(1000 + Math.random() * 9000);
+    //     const orderCode = `ORDER-${today}-${rand}`;
+    //     const newOrder = {
+    //         orderCode, subtotal: cart.subtotal, taxAmount: cart.taxAmount
+    //         , shippingFee: cart.shippingFee, grandTotal: cart.grandTotal
+    //         , user_ID: userID
+    //     };
+    //     console.log("New Order", newOrder);
+    //     await INSERT.into("Orders").entries(newOrder);
+    //     const order = await SELECT.one.from("Orders").where({ orderCode: orderCode });
+    //     console.log("Saved Order", order);
+    //     const orderItem = cartItems.map((item) => {
+    //         let orderItem = {
+    //             order_ID: order.ID,
+    //             variant_ID: item.variant_ID,
+    //             quantity: item.quantity,
+    //             unitPrice: item.unitPrice
+    //         }
+    //         return orderItem
+    //     });
+    //     await INSERT.into("OrderItem").entries(orderItem);
+    // });
 
     srv.on("findLocation", async (req) => {
         const address = req.data.address;
-        if(!address || address=={}){
-            return {err: "Request data is empty",
-                requestData:address}
+        if (!address || address == {}) {
+            return {
+                err: "Request data is empty",
+                requestData: address
+            }
         }
         let destination;
 
@@ -110,13 +112,18 @@ export default (srv) => {
         }
 
         try {
+            const params = new URLSearchParams({
+                street: address.street,
+                city: address.city,
+                state: address.state,
+                country: address.country,
+                postalcode: address.postalcode,
+                format: "jsonv2"
+            }).toString();
+
             const response = await executeHttpRequest(destination, {
                 method: 'GET',
-                url: '/search',
-                params: {
-                    ...address,
-                    format: "jsonv2"
-                },
+                url: `/search?${params}`,
                 headers: {
                     'User-Agent': 'CAP-App'
                 }
@@ -129,9 +136,45 @@ export default (srv) => {
             return {
                 message: err.message,
                 err: "Failed to get response from Nominatim",
-                requestData:address
+                requestData: address
             };
         }
     });
 
+    srv.on("checkout", async (req) => {
+        const { userID, address, paymentMethod } = req.data;
+        let user = await SELECT.one.from('Users', userID);
+        let cart = await SELECT.one.from('Cart').where({ user_ID: user.ID, status: 'ACTIVE' });
+        let cartItems = await SELECT.from("CartItem").where({ cart_ID: cart.ID });
+        const today = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+        const rand = Math.floor(1000 + Math.random() * 9000);
+        const orderCode = `ORDER-${today}-${rand}`;
+        const newOrder = {
+            orderCode, subtotal: cart.subtotal, taxAmount: cart.taxAmount
+            , shippingFee: cart.shippingFee, grandTotal: cart.grandTotal
+            , user_ID: userID,paymentStatus:'AUTHORIZED',paymentMethod:paymentMethod,
+            shippingAddress:address,status:'DELIVERED'
+        };
+        console.log("New Order", newOrder);
+        await INSERT.into("Orders").entries(newOrder);
+        const order = await SELECT.one.from("Orders").where({ orderCode: orderCode });
+        console.log("Saved Order", order);
+        const orderItem = cartItems.map((item) => {
+            let orderItem = {
+                order_ID: order.ID,
+                variant_ID: item.variant_ID,
+                quantity: item.quantity,
+                unitPrice: item.unitPrice
+            }
+            return orderItem
+        });
+        await INSERT.into("OrderItem").entries(orderItem);
+        cart.status = 'CHECKED_OUT';
+        await UPDATE('Cart').set(cart).where({ ID: cart.ID });
+    });
+
+
+    srv.on("SayHello",async (req)=>{
+        return "HelloWorld"
+    })
 }

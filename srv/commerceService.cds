@@ -34,9 +34,12 @@ service CommerceService {
         where
             isCarousel = true;
 
+    entity Orders           as projection on db.Orders;
+    entity OrderItems       as projection on db.OrderItem;
     action addToCart(productCode: String, quantity: Integer, userID: String);
-    action checkout(userID: String);
+    action checkout(userID: String, address: LocationRequest, paymentMethod: String);
     action findLocation(address: LocationRequest) returns array of String;
+    function SayHello() returns String;
 }
 
 type LocationRequest {
