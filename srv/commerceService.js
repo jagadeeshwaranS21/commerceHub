@@ -173,8 +173,4 @@ export default (srv) => {
         await UPDATE('Cart').set(cart).where({ ID: cart.ID });
     });
 
-
-    srv.on("SayHello",async (req)=>{
-        return "HelloWorld";
-    })
 }

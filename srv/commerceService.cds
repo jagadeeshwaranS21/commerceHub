@@ -39,7 +39,6 @@ service CommerceService {
     action addToCart(productCode: String, quantity: Integer, userID: String);
     action checkout(userID: String, address: LocationRequest, paymentMethod: String);
     action findLocation(address: LocationRequest) returns array of String;
-    function SayHello() returns String;
 }
 
 type LocationRequest {
